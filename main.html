@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		#game_page {
+			display: none;
+		}
+		/*#computer_choice,#scores_and_messages,#human_choice {
+			display:inline;
+		}*/
+	</style>
+</head>
+
+<body>
+	<script>
+		var rounds_count = document.getElementById("rounds_page").innerHTML;
+		
+		function hideRoundsPage() {
+			document.getElementById("rounds_page").innerHTML = document.getElementById("game_page").innerHTML;
+		}
+
+		function computerGuess () {
+			let random_number = Math.random()*10;
+			let rounded_number = Math.round(random_number);
+			let random_int = rounded_number % 3;
+
+			let choice = "";
+			console.log(random_int);
+			// Weird stuff happened here, not going to describe it
+			if (random_int == 1) {
+				choice = "Paper";
+			} 
+			else if (random_int == 2) {
+				choice = "Scissors";
+			} else {
+				choice = "Rock";
+			}
+			return choice;
+		}
+
+		function updateComputerGuess () {
+			let computer_option = computerGuess();
+			document.getElementById("computer_choice").innerHTML = computer_option;
+			return computer_option;
+		}
+
+		function updateHumanGuess (human_option) {
+			document.getElementById("human_choice").innerHTML = human_option;
+		}
+
+		function updateScore (computer_option,human_option) {
+			let computer_score = Number(document.getElementById("computer_score").innerHTML);
+			let human_score = Number(document.getElementById("human_score").innerHTML);
+
+			if ((computer_option == human_option)) {
+				return true;
+			} else if ((computer_option == "Paper") && (human_option == "Rock")) {
+				computer_score = computer_score + 1;
+			} else if ((computer_option == "Rock") && (human_option == "Scissors")) {
+				computer_score = computer_score + 1;
+			} else if ((computer_option == "Scissors") && (human_option == "Paper")) {
+				computer_score = computer_score + 1;
+			} else if ((computer_option == "Paper") && (human_option == "Scissors")) {
+				human_score = human_score + 1;
+			} else if ((computer_option == "Scissors") && (human_option == "Rock")) {
+				human_score = human_score + 1;
+			} else if ((computer_option == "Rock") && (human_option == "Paper")) {
+				human_score = human_score + 1;
+			} 
+
+			console.log(computer_choice,human_option,human_choice);
+			document.getElementById("computer_score").innerHTML = computer_score;
+			document.getElementById("human_score").innerHTML = human_score;
+
+		}
+
+		function updateResultMessage (computer_option,human_option) {
+			if ((computer_option == "Paper") && (human_option == "Rock")) {
+				document.getElementById("message").innerHTML = "Computer wins this one";
+			} else if ((computer_option == "Rock") && (human_option == "Scissors")) {
+				document.getElementById("message").innerHTML = "Computer wins this one";
+			} else if ((computer_option == "Scissors") && (human_option == "Paper")) {
+				document.getElementById("message").innerHTML = "Computer wins this one";
+			} else if ((computer_option == "Paper") && (human_option == "Scissors")) {
+				document.getElementById("message").innerHTML = "Human wins this one";
+			} else if ((computer_option == "Scissors") && (human_option == "Rock")) {
+				document.getElementById("message").innerHTML = "Human wins this one";
+			} else if ((computer_option == "Rock") && (human_option == "Paper")) {
+				document.getElementById("message").innerHTML = "Human wins this one";
+			} else {
+				document.getElementById("message").innerHTML = "It is a draw";
+			}
+		}
+
+		function optionsButtonFunc (option) {
+			let computer_option = updateComputerGuess();
+			updateHumanGuess(option);
+			updateScore(computer_option,option);
+			updateResultMessage(computer_option,option);
+			console.log("Result has been updated");
+		}
+	</script>
+	<div id="rounds_page">
+		<p>How many rounds do you wish to play</p>
+		<input type="number" name="rounds_no" id="rounds_no" min="1" max="30" value="1">
+		<input type="submit" name="start_rounds" id="start_rounds" onclick=hideRoundsPage()>
+	</div>
+
+	<div id="game_page">
+		<span>
+			<p id="computer_sign">C</p>
+			<p id="computer_choice">Rock</p>
+		</span>
+		<span id="scores_and_messages">
+			<span id="human_score">0</span><span style="margin-left: 30px;margin-right: 30px">VS</span><span id="computer_score">0</span><br>
+			<p id="message">It is a draw</p>
+		</span>
+
+		<span>
+			<p id="human_sign">H</p>
+			<p id="human_choice">Rock</p>
+		</span>
+		<span id="options">
+			<button name="rock" value="rock" type="submit" onclick="optionsButtonFunc('Rock')">Rock</button>
+			<button name="paper" value="paper" type="submit" onclick="optionsButtonFunc('Paper')">Paper</button>
+			<button name="scissors" value="scissors" type="submit" onclick="optionsButtonFunc('Scissors')">Scissors</button>
+	</div>
+</body>
+</html>
