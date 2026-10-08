@@ -5,18 +5,29 @@
 		#game_page {
 			display: none;
 		}
-		/*#computer_choice,#scores_and_messages,#human_choice {
-			display:inline;
-		}*/
+		p#game_over {
+			display: none;
+		}
 	</style>
 </head>
 
 <body>
 	<script>
-		var rounds_count = document.getElementById("rounds_page").innerHTML;
-		
+		let rounds_num = 0;
+
+		function getRoundAssigned() {
+			// Getting the no of rounds selected
+			let rounds_num = document.getElementById("rounds_no").value;	
+			console.log(rounds_num);
+			return rounds_num;
+		}
+
 		function hideRoundsPage() {
-			document.getElementById("rounds_page").innerHTML = document.getElementById("game_page").innerHTML;
+			rounds_num = getRoundAssigned();
+
+			if (Number.isInteger(Number(rounds_num))) {
+				document.getElementById("rounds_page").innerHTML = document.getElementById("game_page").innerHTML;
+			}
 		}
 
 		function computerGuess () {
@@ -25,7 +36,7 @@
 			let random_int = rounded_number % 3;
 
 			let choice = "";
-			console.log(random_int);
+
 			// Weird stuff happened here, not going to describe it
 			if (random_int == 1) {
 				choice = "Paper";
@@ -92,12 +103,35 @@
 			}
 		}
 
+		function calculateRemainingRounds () {
+			rounds_num = rounds_num - 1;
+			console.log(rounds_num);
+		}
+
 		function optionsButtonFunc (option) {
-			let computer_option = updateComputerGuess();
-			updateHumanGuess(option);
-			updateScore(computer_option,option);
-			updateResultMessage(computer_option,option);
-			console.log("Result has been updated");
+			calculateRemainingRounds();
+
+			if (rounds_num > 0) {
+				let computer_option = updateComputerGuess();
+				updateHumanGuess(option);
+				updateScore(computer_option,option);
+				updateResultMessage(computer_option,option);
+			} else {
+				document.getElementById("game_over").style.display = "block";
+
+				let computer_scoring = Number(document.getElementById("computer_score").innerHTML);
+				let human_scoring = Number(document.getElementById("human_score").innerHTML);
+
+				console.log(computer_scoring,human_scoring);
+
+				if (computer_scoring > human_scoring) {
+					document.getElementById("game_over").innerHTML = "Game Over: Computer Wins";
+				} else if (computer_scoring < human_scoring) {
+					document.getElementById("game_over").innerHTML = "Game Over: Human Wins";
+				} else {
+					document.getElementById("game_over").innerHTML = "Game Over:  It's a draw";
+				}
+			}	
 		}
 	</script>
 	<div id="rounds_page">
@@ -107,12 +141,13 @@
 	</div>
 
 	<div id="game_page">
+		<p id="game_over">Game Over</p>
 		<span>
 			<p id="computer_sign">C</p>
 			<p id="computer_choice">Rock</p>
 		</span>
 		<span id="scores_and_messages">
-			<span id="human_score">0</span><span style="margin-left: 30px;margin-right: 30px">VS</span><span id="computer_score">0</span><br>
+			<span id="computer_score">0</span><span style="margin-left: 30px;margin-right: 30px">VS</span><span id="human_score">0</span><br>
 			<p id="message">It is a draw</p>
 		</span>
 
